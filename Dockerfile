@@ -3,7 +3,7 @@ FROM $BUILD_FROM
 
 ENV GOPATH /opt/go
 
-COPY GeoIP.conf /usr/local/etc/
+COPY files/GeoIP.conf /usr/local/etc/
 
 # Install dependencies
 RUN apk add --no-cache --virtual .build-dependencies gcc linux-headers geoip-dev openssl tar curl go git musl-dev \
