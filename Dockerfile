@@ -27,4 +27,4 @@ RUN chmod a+x run.sh \
 
 ENTRYPOINT ["/openvpn-monitor/run.sh"]
 
-CMD ["gunicorn", "openvpn-monitor", "--bind", "0.0.0.0:80" "--bind", "172.30.32.2:8099"]
+CMD ["gunicorn", "openvpn-monitor", "--bind", "0.0.0.0:80", "--bind", "172.30.32.2:8099"]
