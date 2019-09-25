@@ -1,6 +1,6 @@
 {
   "name": "Openvpn Monitor",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "slug": "openvpn_monitor",
   "description": "OpenVPN Monitor is a web-based utility that displays the status of OpenVPN servers. It includes information such as the usernames/hostnames connected, remote and VPN IP addresses, approximate locations (using GeoIP), traffic consumption and more.",
   "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
@@ -35,8 +35,12 @@
 	]
   },
   "ports": {
-	"80/tcp": 8234
+	"80/tcp": null
 	},
+  "ports_description": {
+    "80/tcp": "Web interface (Not required for Hass.io Ingress)"
+  },
   "privileged": ["NET_ADMIN"],
+  "ingress": true,
   "homeassistant_api": true
 }

@@ -25,8 +25,6 @@ WORKDIR /openvpn-monitor
 RUN chmod a+x run.sh \
   && pip install openvpn-monitor gunicorn
 
-EXPOSE 80
-
 ENTRYPOINT ["/openvpn-monitor/run.sh"]
 
-CMD ["gunicorn", "openvpn-monitor", "--bind", "0.0.0.0:80"]
+CMD ["gunicorn", "openvpn-monitor", "--bind", "0.0.0.0:80" "--bind", "172.30.32.2:8099"]
