@@ -1,5 +1,5 @@
 {
-  "name": "SpaceDragon's repository",
-  "url": "https://github.com/TheMrBooyah/hassio-openvpn-monitor",
+  "name": "OpenVPN only repository",
+  "url": "https://github.com/RuimteDraak/hassio-openvpn-monitor",
   "maintainer": "SpaceDragon"
 }
