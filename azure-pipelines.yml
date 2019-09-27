@@ -29,11 +29,12 @@ steps:
       Write-Host "##vso[task.setvariable variable=version]$version"
       Write-Host "Version: $version"
   displayName: 'Read version from config file'
-- task: PowerShell@2
+
+- task: Docker@2
   inputs:
-    targetType: 'inline'
-    script: sudo docker login -u "$(dockerUsername)" -p "$(dockerPassword)"
-  displayName: 'Docker hub login'
+    command: login
+    containerRegistry: dockerhub
+  displayName: Login to Docker Hub
 - task: PowerShell@2
   inputs:
     targetTYpe: 'inline'
