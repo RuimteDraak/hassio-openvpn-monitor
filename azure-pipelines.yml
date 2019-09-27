@@ -33,12 +33,12 @@ steps:
     command: login
     containerRegistry: dockerhub
   displayName: Login to Docker Hub
-- task: PowerShell@2
+- task: Bash@3
   inputs:
     targetTYpe: 'inline'
     script: sudo docker pull homeassistant/amd64-builder:$(versionBuilder)
   displayName: 'Install Builder'
-- task: PowerShell@2
+- task: Bash@3
   inputs:
     targetType: 'inline'
     script: |
@@ -48,5 +48,4 @@ steps:
         -t $(Build.SourcesDirectory) \
         --all \
         --docker-hub-check
-
   displayName: 'Build images'
