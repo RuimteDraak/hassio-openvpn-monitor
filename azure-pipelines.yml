@@ -17,8 +17,8 @@ steps:
       # Write your PowerShell commands here.
       $file = "$(Build.SourcesDirectory)/config.json"
       $json = (Get-Content -Path $file | Out-String | ConvertFrom-Json)
-      Write-Host "$(json)"
+      Write-Host "$json"
       $version = $json.version
-      Write-Host "##vso[task.setvariable variable=version]$(version)"
+      Write-Host "##vso[task.setvariable variable=version]$version"
       Write-Host "Version: $version"
   displayName: 'Read version from config file'
