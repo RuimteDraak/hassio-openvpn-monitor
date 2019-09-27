@@ -14,7 +14,7 @@ variables:
     value: '--all'
 
 pool:
-  vmImage: 'ubuntu-16.04'
+  vmImage: 'ubuntu-latest'
 
 steps:
 - task: PowerShell@2
@@ -50,5 +50,6 @@ steps:
         homeassistant/amd64-builder:$(versionBuilder) \
         -t /data \
         --aarch64 \
+        --docker-hub ruimtedraak \
         --docker-hub-check
   displayName: 'Build images'
