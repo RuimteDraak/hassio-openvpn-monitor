@@ -10,8 +10,6 @@ variables:
   - group: docker
   - name: versionBuilder
     value: '2.0'
-  - name: addonName
-    value: 'openvpn-monitor'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -46,8 +44,9 @@ steps:
     script: |
       sudo docker run --rm --privileged \
         -v ~/.docker:/root/.docker \
-        -v /run/docker.sock:/run/docker.sock:rw -v $(pwd):/data:ro \
-        homeassistant/amd64-builder:$(versionBuilder) \
-        --addon --all -t /data/$(parameters.addonName) \
-        --docker-hub homeassistant --docker-hub-check
-  displayName: 'Build $(parameters.addonName)'
+        -v /my_addon:/data homeassistant/amd64-builder \
+        -t $(Build.SourcesDirectory) \
+        --all \
+        --docker-hub-check
+
+  displayName: 'Build images'
