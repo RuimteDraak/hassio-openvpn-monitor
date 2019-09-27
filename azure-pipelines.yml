@@ -10,6 +10,8 @@ variables:
   - group: docker
   - name: versionBuilder
     value: '2.0'
+  - name: buildTarget
+    value: '--all'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -47,6 +49,6 @@ steps:
         -v /$(Build.SourcesDirectory):/data \
         homeassistant/amd64-builder:$(versionBuilder) \
         -t /data \
-        --all \
+        ${{parameters.buildTarget}} \
         --docker-hub-check
   displayName: 'Build images'
