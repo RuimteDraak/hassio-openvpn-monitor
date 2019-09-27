@@ -49,6 +49,6 @@ steps:
         -v /$(Build.SourcesDirectory):/data \
         homeassistant/amd64-builder:$(versionBuilder) \
         -t /data \
-        $(parameters.buildTarget) \
+        --aarch64 \
         --docker-hub-check
   displayName: 'Build images'
