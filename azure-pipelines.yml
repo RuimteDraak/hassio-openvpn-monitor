@@ -44,8 +44,9 @@ steps:
     script: |
       sudo docker run --rm --privileged \
         -v ~/.docker:/root/.docker \
-        -v /my_addon:/data homeassistant/amd64-builder \
-        -t $(Build.SourcesDirectory) \
+        -v /$(Build.SourcesDirectory):/data \
+        homeassistant/amd64-builder:$(versionBuilder) \
+        -t / \
         --all \
         --docker-hub-check
   displayName: 'Build images'
