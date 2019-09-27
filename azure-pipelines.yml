@@ -10,10 +10,14 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
-
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Write your PowerShell commands here.
+      $file = "$(Build.SourcesDirectory)/config.json"
+      $json = (Get-Content -Raw -Path $file | ConvertFrom-Json)
+      $version = $(json.version)
+      Write-Host "##vso[task.setvariable variable=version]$(version)"
+      Write-Host "Version: $version"
+  displayName: 'Read version from config file'
