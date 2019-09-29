@@ -47,7 +47,7 @@ steps:
       sudo docker run --rm --privileged \
         -v ~/.docker:/root/.docker \
         -v /$(Build.SourcesDirectory):/data \
-        -v /run/docker.sock:/run/docker.sock:rw 
+        -v /run/docker.sock:/run/docker.sock:rw \
         -v $(pwd):/data:ro \
         homeassistant/amd64-builder:$(versionBuilder) \
         -t /data \
