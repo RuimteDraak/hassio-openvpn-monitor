@@ -44,7 +44,9 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      sudo ./home-assistant/builder.sh \
+      cd home-assistant
+
+      sudo ./builder.sh \
         -t $(Build.SourcesDirectory) \
         --aarch64 \
         --docker-hub ruimtedraak \
