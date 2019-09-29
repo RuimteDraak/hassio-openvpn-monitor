@@ -10,8 +10,6 @@ variables:
   - group: docker
   - name: versionBuilder
     value: '2.0'
-  - name: buildTarget
-    value: '--all'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -50,7 +48,7 @@ steps:
         -v /run/docker.sock:/run/docker.sock:rw \
         homeassistant/amd64-builder:$(versionBuilder) \
         -t /data \
-        --aarch64 \
+        --all \
         --docker-hub ruimtedraak \
         --docker-hub-check
   displayName: 'Build images'
