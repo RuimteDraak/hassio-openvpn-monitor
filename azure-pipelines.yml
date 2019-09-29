@@ -38,17 +38,16 @@ steps:
 - task: Bash@3
   inputs:
     targetTYpe: 'inline'
-    script: sudo docker pull homeassistant/amd64-builder:$(versionBuilder)
+    script: git clone https://github.com/home-assistant/hassio-builder.git
   displayName: 'Install Builder'
 - task: Bash@3
   inputs:
     targetType: 'inline'
     script: |
-      sudo docker run --rm --privileged \
-        -v ~/.docker:/root/.docker \
-        -v /$(Build.SourcesDirectory):/data \
-        homeassistant/amd64-builder:$(versionBuilder) \
-        -t /data \
+      cd home-assistant
+
+      sudo .\builder.sh \
+        -t $(Build.SourcesDirectory) \
         --aarch64 \
         --docker-hub ruimtedraak \
         --docker-hub-check
