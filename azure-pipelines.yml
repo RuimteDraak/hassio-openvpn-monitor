@@ -28,11 +28,16 @@ steps:
       Write-Host "Version: $version"
   displayName: 'Read version from config file'
 
-- task: Docker@2
+# - task: Docker@2
+# inputs:
+#     command: login
+#     containerRegistry: dockerhub
+#   displayName: Login to Docker Hub
+- task: Bash@3
   inputs:
-    command: login
-    containerRegistry: dockerhub
-  displayName: Login to Docker Hub
+    targetType: 'inline'
+    script: sudo docker login -u $(dockerUsername) -p $(dockerPassword)
+  displayName: 'Docker hub login'
 - task: Bash@3
   inputs:
     targetTYpe: 'inline'
