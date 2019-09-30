@@ -63,7 +63,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      git clone https://www.github.com/RuimteDraak/hassio-repository
+      git clone $(repository)
 
       if (!(Test-Path "$(Build.SourcesDirectory)/hassio-repository/hassio-$(addonName)" -PathType Container)) {
         New-Item -Path "$(Build.SourcesDirectory)/hassio-repository" -Name "hassio-$(addonName)" -ItemType "directory"
@@ -92,7 +92,8 @@ steps:
 
       git config --global user.email "RuimteDraak@no-reply.nl"
       git config --global user.name "RuimteDraak"
-      git add *
-      git commit -m "Update $(addonName) to version $($env:version)"
+      git add hassio-$(addonName)/*
+      git commit -m "Update $(addonName) to version $(env:version)"
       git push
+      Write-Host "Updated repository to version $(env:version)"
   displayName: 'Update repository'
