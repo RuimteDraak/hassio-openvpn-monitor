@@ -10,6 +10,10 @@ variables:
   - group: docker
   - name: versionBuilder
     value: '2.0'
+  - name: addonName
+    value: 'openvpn-monitor'
+  - name: repository
+    value: 'https://www.github.com/RuimteDraak/hassio-repository'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -28,21 +32,18 @@ steps:
       Write-Host "Version: $version"
   displayName: 'Read version from config file'
 
-# - task: Docker@2
-# inputs:
-#     command: login
-#     containerRegistry: dockerhub
-#   displayName: Login to Docker Hub
 - task: Bash@3
   inputs:
     targetType: 'inline'
     script: sudo docker login -u $(dockerUsername) -p $(dockerPassword)
   displayName: 'Docker hub login'
+
 - task: Bash@3
   inputs:
     targetTYpe: 'inline'
     script: sudo docker pull homeassistant/amd64-builder:$(versionBuilder)
   displayName: 'Install Builder'
+
 - task: Bash@3
   inputs:
     targetType: 'inline'
@@ -57,3 +58,32 @@ steps:
         --docker-hub ruimtedraak \
         --docker-hub-check
   displayName: 'Build images'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      git clone https://www.github.com/RuimteDraak/hassio-repository
+
+      if (!(Test-Path "$(Build.SourcesDirectory)/hassio-repository/hassio-$(addonName)" -PathType Container)) {
+        New-Item -Path "$(Build.SourcesDirectory)/hassio-repository" -Name "hassio-$(addonName)" -ItemType "directory"
+        Write-Host "Created new directory hassio-$(addonName)"
+      }
+
+      cd hassio-repository/hassio-$(addonName)
+      if (!(Test-Path "config.json" -PathType Leaf)) {
+        $json = (Get-Content -Path $file | Out-String | ConvertFrom-Json)
+        $version = $json.version
+
+        if ([version]$version -gt [version]$($env:version)) {
+          Write-Host "New version bigger then previous version"
+        }
+        else {
+          Write-Host "Current version already greater"
+        }
+      }
+      else {
+        "No config found"
+      }
+
+  displayName: 'Update repository'
