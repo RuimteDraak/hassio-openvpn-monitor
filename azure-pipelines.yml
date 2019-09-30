@@ -92,7 +92,7 @@ steps:
 
       git config --global user.email "RuimteDraak@no-reply.nl"
       git config --global user.name "RuimteDraak"
-      git add hassio-$(addonName)/*
+      git add --all
       git commit -m "Update $(addonName) to version $(env:version)"
       git push
       Write-Host "Updated repository to version $(env:version)"
