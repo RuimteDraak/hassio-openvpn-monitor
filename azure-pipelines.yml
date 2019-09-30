@@ -71,7 +71,7 @@ steps:
       }
 
       cd hassio-repository/hassio-$(addonName)
-      if (!(Test-Path "config.json" -PathType Leaf)) {
+      if (Test-Path "config.json" -PathType Leaf) {
         $json = (Get-Content -Path "config.json" | Out-String | ConvertFrom-Json)
         $version = $json.version
 
