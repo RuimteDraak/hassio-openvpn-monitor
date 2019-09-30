@@ -83,10 +83,12 @@ steps:
         }
       }
       else {
+        Write-Host "No config found, creating first registration"
         Copy-Item -Path "$(Build.SourcesDirectory)/config.json" -Destination "$(Build.SourcesDirectory)/hassio-repository/hassio-$(addonName)/config.json"
-        Write-Host "No config found"
       }
 
+      git config --global user.email "RuimteDraak@no-reply.nl"
+      git config --global user.name "RuimteDraak"
       git add *
       git commit -m "Update $(addonName) to version $($env:version)"
 
