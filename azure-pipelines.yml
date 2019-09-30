@@ -88,7 +88,7 @@ steps:
       }
 
       Copy-Item -Path "$(Build.SourcesDirectory)/config.json" -Destination "$(Build.SourcesDirectory)/hassio-repository/hassio-$(addonName)/config.json"
-      Copy-Item -Path "$(Build.SourcesDirectory)/readme.MD" -Destination "$(Build.SourcesDirectory)/hassio-repository/hassio-$(addonName)/readme.MD"
+      Copy-Item -Path "$(Build.SourcesDirectory)/README.md" -Destination "$(Build.SourcesDirectory)/hassio-repository/hassio-$(addonName)/README.md"
 
       git config --global user.email "RuimteDraak@no-reply.nl"
       git config --global user.name "RuimteDraak"
