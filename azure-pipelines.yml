@@ -76,7 +76,7 @@ steps:
         $json = (Get-Content -Path "config.json" | Out-String | ConvertFrom-Json)
         $version = $json.version
 
-        if ([version]$version -gt [version]$($env:version)) {
+        if ([version]$version -gt [version]$env:version) {
           Write-Host "New version bigger then previous version"
         }
         else {
@@ -94,7 +94,7 @@ steps:
       git config --global user.email "RuimteDraak@no-reply.nl"
       git config --global user.name "RuimteDraak"
       git add --all
-      git commit -m "Update $(addonName) to version $(env:version)"
+      git commit -m "Update $(addonName) to version $env:version"
       git push
-      Write-Host "Updated repository to version $(env:version)"
+      Write-Host "Updated repository to version $env:version"
   displayName: 'Update repository'
