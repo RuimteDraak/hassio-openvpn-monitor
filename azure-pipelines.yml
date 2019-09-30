@@ -55,11 +55,11 @@ steps:
         -v /run/docker.sock:/run/docker.sock:rw \
         homeassistant/amd64-builder:$(versionBuilder) \
         -t /data \
-        --armhf \
+        # --armhf \
         --armv7 \
-        --amd64 \
-        --aarch64 \
-        --i386 \
+        # --amd64 \
+        # --aarch64 \
+        # --i386 \
         --docker-hub ruimtedraak \
         --docker-hub-check
   displayName: 'Build images'
