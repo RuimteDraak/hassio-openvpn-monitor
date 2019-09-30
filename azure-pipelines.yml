@@ -10,7 +10,7 @@ variables:
   - group: docker
   - group: git
   - name: versionBuilder
-    value: '2.0'
+    value: 'latest'
   - name: addonName
     value: 'openvpn-monitor'
   - name: repository
