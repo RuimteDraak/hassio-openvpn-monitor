@@ -15,6 +15,8 @@ variables:
     value: 'openvpn-monitor'
   - name: repository
     value: 'RuimteDraak/hassio-repository.git'
+  - name: buildTarget
+    value: '--armv7'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -55,7 +57,7 @@ steps:
         -v /run/docker.sock:/run/docker.sock:rw \
         homeassistant/amd64-builder:$(versionBuilder) \
         -t /data \
-        --all \
+        $(buildTarget) \
         --docker-hub ruimtedraak \
         --docker-hub-check
   displayName: 'Build images'
