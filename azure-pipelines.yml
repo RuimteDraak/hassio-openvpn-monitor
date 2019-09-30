@@ -64,7 +64,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      git clone https://x-access-token:$(gitRepositoryToken)@github.com$(repository)
+      git clone https://x-access-token:$(gitRepositoryToken)@github.com/$(repository)
 
       if (!(Test-Path "$(Build.SourcesDirectory)/hassio-repository/hassio-$(addonName)" -PathType Container)) {
         New-Item -Path "$(Build.SourcesDirectory)/hassio-repository" -Name "hassio-$(addonName)" -ItemType "directory"
