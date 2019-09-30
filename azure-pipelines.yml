@@ -8,12 +8,13 @@ trigger:
 
 variables:
   - group: docker
+  - group: git
   - name: versionBuilder
     value: '2.0'
   - name: addonName
     value: 'openvpn-monitor'
   - name: repository
-    value: 'https://www.github.com/RuimteDraak/hassio-repository'
+    value: 'RuimteDraak/hassio-repository.git'
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -63,7 +64,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      git clone $(repository)
+      git clone https://x-access-token:$(gitRepositoryToken)@github.com$(repository)
 
       if (!(Test-Path "$(Build.SourcesDirectory)/hassio-repository/hassio-$(addonName)" -PathType Container)) {
         New-Item -Path "$(Build.SourcesDirectory)/hassio-repository" -Name "hassio-$(addonName)" -ItemType "directory"
