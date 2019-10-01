@@ -19,10 +19,10 @@ variables:
     value: '--armv7'
 
 jobs:
-  - job:
+  - job: prepare
     condition: eq(variables['Build.SourceBranchName'], 'master')
     pool:
-      vmImage: 'ubuntu-16.04'
+      vmImage: 'ubuntu-latest'
 
     steps:
     - task: PowerShell@2
@@ -34,10 +34,13 @@ jobs:
           $json = (Get-Content -Path $file | Out-String | ConvertFrom-Json)
           Write-Host "$json"
           $version = $json.version
-          Write-Host "##vso[task.setvariable variable=version]$version"
+          Write-Host "##vso[task.setvariable variable=version;isOutput=true]$version"
           Write-Host "Version: $version"
       displayName: 'Read version from config file'
 
+  - job: build_aamd64
+    dependsOn: 'prepare'
+    steps:
     - task: Bash@3
       inputs:
         targetType: 'inline'
@@ -60,11 +63,136 @@ jobs:
             -v /run/docker.sock:/run/docker.sock:rw \
             homeassistant/amd64-builder:$(versionBuilder) \
             -t /data \
-            $(buildTarget) \
+            --amd64 \
             --docker-hub ruimtedraak \
             --docker-hub-check
       displayName: 'Build images'
 
+  - job: build_i386
+    dependsOn: 'prepare'
+    steps:
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: sudo docker login -u $(dockerUsername) -p $(dockerPassword)
+      displayName: 'Docker hub login'
+
+    - task: Bash@3
+      inputs:
+        targetTYpe: 'inline'
+        script: sudo docker pull homeassistant/amd64-builder:$(versionBuilder)
+      displayName: 'Install Builder'
+
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          sudo docker run --rm --privileged \
+            -v ~/.docker:/root/.docker \
+            -v /$(Build.SourcesDirectory):/data \
+            -v /run/docker.sock:/run/docker.sock:rw \
+            homeassistant/amd64-builder:$(versionBuilder) \
+            -t /data \
+            --i386 \
+            --docker-hub ruimtedraak \
+            --docker-hub-check
+      displayName: 'Build images'
+
+  - job: build_aarch64
+    dependsOn: 'prepare'
+    steps:
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: sudo docker login -u $(dockerUsername) -p $(dockerPassword)
+      displayName: 'Docker hub login'
+
+    - task: Bash@3
+      inputs:
+        targetTYpe: 'inline'
+        script: sudo docker pull homeassistant/amd64-builder:$(versionBuilder)
+      displayName: 'Install Builder'
+
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          sudo docker run --rm --privileged \
+            -v ~/.docker:/root/.docker \
+            -v /$(Build.SourcesDirectory):/data \
+            -v /run/docker.sock:/run/docker.sock:rw \
+            homeassistant/amd64-builder:$(versionBuilder) \
+            -t /data \
+            --aarch64 \
+            --docker-hub ruimtedraak \
+            --docker-hub-check
+      displayName: 'Build images'
+
+  - job: build_armv7
+    dependsOn: 'prepare'
+    steps:
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: sudo docker login -u $(dockerUsername) -p $(dockerPassword)
+      displayName: 'Docker hub login'
+
+    - task: Bash@3
+      inputs:
+        targetTYpe: 'inline'
+        script: sudo docker pull homeassistant/amd64-builder:$(versionBuilder)
+      displayName: 'Install Builder'
+
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          sudo docker run --rm --privileged \
+            -v ~/.docker:/root/.docker \
+            -v /$(Build.SourcesDirectory):/data \
+            -v /run/docker.sock:/run/docker.sock:rw \
+            homeassistant/amd64-builder:$(versionBuilder) \
+            -t /data \
+            --armv7 \
+            --docker-hub ruimtedraak \
+            --docker-hub-check
+      displayName: 'Build images'
+
+  - job: build_armhf
+    dependsOn: 'prepare'
+    steps:
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: sudo docker login -u $(dockerUsername) -p $(dockerPassword)
+      displayName: 'Docker hub login'
+
+    - task: Bash@3
+      inputs:
+        targetTYpe: 'inline'
+        script: sudo docker pull homeassistant/amd64-builder:$(versionBuilder)
+      displayName: 'Install Builder'
+
+    - task: Bash@3
+      inputs:
+        targetType: 'inline'
+        script: |
+          sudo docker run --rm --privileged \
+            -v ~/.docker:/root/.docker \
+            -v /$(Build.SourcesDirectory):/data \
+            -v /run/docker.sock:/run/docker.sock:rw \
+            homeassistant/amd64-builder:$(versionBuilder) \
+            -t /data \
+            --armhf \
+            --docker-hub ruimtedraak \
+            --docker-hub-check
+      displayName: 'Build images'
+
+  - job: update_repository
+    dependsOn: [ build_aamd64, build_aarch64, build_armhf, build_armv7, build_i386 ]
+    variables:
+      version: $[ dependencies.A.outputs['prepare.version'] ]
+    steps:
     - task: PowerShell@2
       inputs:
         targetType: 'inline'
@@ -79,9 +207,9 @@ jobs:
           cd hassio-repository/hassio-$(addonName)
           if (Test-Path "config.json" -PathType Leaf) {
             $json = (Get-Content -Path "config.json" | Out-String | ConvertFrom-Json)
-            $version = $json.version
+            $newVersion = $json.version
 
-            if ([version]$version -gt [version]$env:version) {
+            if ([version]$newVersion -gt [version]$version) {
               Write-Host "New version bigger then previous version"
             }
             else {
@@ -99,7 +227,7 @@ jobs:
           git config --global user.email "RuimteDraak@no-reply.nl"
           git config --global user.name "RuimteDraak"
           git add --all
-          git commit -m "Update $(addonName) to version $env:version"
+          git commit -m "Update $(addonName) to version $version"
           git push
-          Write-Host "Updated repository to version $env:version"
+          Write-Host "Updated repository to version $version"
       displayName: 'Update repository'
