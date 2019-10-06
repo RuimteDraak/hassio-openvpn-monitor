@@ -1,0 +1,1 @@
+docker build --build-arg BUILD_FROM="homeassistant/armhf-base:latest" -t local/hassio-openvpn-monitor .

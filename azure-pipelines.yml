@@ -140,7 +140,7 @@ jobs:
     - task: Bash@3
       inputs:
         targetTYpe: 'inline'
-        script: sudo docker pull homeassistant/amd64-builder:$(versionBuilder)
+        script: sudo docker pull homeassistant/armv7-builder:$(versionBuilder)
       displayName: 'Install Builder'
 
     - task: Bash@3
@@ -151,7 +151,7 @@ jobs:
             -v ~/.docker:/root/.docker \
             -v /$(Build.SourcesDirectory):/data \
             -v /run/docker.sock:/run/docker.sock:rw \
-            homeassistant/amd64-builder:$(versionBuilder) \
+            homeassistant/armv7-builder:$(versionBuilder) \
             -t /data \
             --armv7 \
             --docker-hub ruimtedraak \
@@ -170,7 +170,7 @@ jobs:
     - task: Bash@3
       inputs:
         targetTYpe: 'inline'
-        script: sudo docker pull homeassistant/amd64-builder:$(versionBuilder)
+        script: sudo docker pull homeassistant/armv7-builder:$(versionBuilder)
       displayName: 'Install Builder'
 
     - task: Bash@3
@@ -181,7 +181,7 @@ jobs:
             -v ~/.docker:/root/.docker \
             -v /$(Build.SourcesDirectory):/data \
             -v /run/docker.sock:/run/docker.sock:rw \
-            homeassistant/amd64-builder:$(versionBuilder) \
+            homeassistant/armv7-builder:$(versionBuilder) \
             -t /data \
             --armhf \
             --docker-hub ruimtedraak \
