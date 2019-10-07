@@ -6,7 +6,7 @@ ENV GOPATH /opt/go
 COPY files/GeoIP.conf /usr/local/etc/
 
 # Install dependencies
-RUN apk add --no-cache --virtual .build-dependencies gcc linux-headers openssl tar curl git musl-dev \
+RUN apk add --no-cache --virtual .build-dependencies gcc linux-headers openssl tar curl git musl-dev jq \
   && apk add --no-cache python2-dev py-pip \
   && apk add --update npm \
   && npm install mustache -g \

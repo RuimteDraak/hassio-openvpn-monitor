@@ -8,6 +8,8 @@ curl -X GET \
     -H "Content-Type: application/json" \
     -o "/data/config.json" \
     http://hassio/homeassistant/api/config
+	
+jq -s '.[0] * .[1]' /data/config.json $CONFIG_PATH > $CONFIG_PATH
 
 mustache $CONFIG_PATH /openvpn-monitor/server.mustache > ./openvpn-monitor.conf
 
