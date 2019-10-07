@@ -13,6 +13,7 @@ RUN apk add --no-cache --virtual .build-dependencies gcc linux-headers openssl t
   && git clone https://github.com/furlongm/openvpn-monitor.git \
   && wget https://github.com/quantumew/mustache-cli/releases/download/v1.0.0/mustache-cli-linux-amd64.zip \
   && unzip -o mustache-cli-linux-amd64.zip -d /openvpn-monitor \
+  && chmod a+x /openvpn-monitor/mustache \
   && rm /openvpn-monitor/README.md \
   && rm /openvpn-monitor/CHANGELOG.md \
   && apk del --purge .build-dependencies
