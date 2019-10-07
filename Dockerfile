@@ -6,16 +6,12 @@ ENV GOPATH /opt/go
 COPY files/GeoIP.conf /usr/local/etc/
 
 # Install dependencies
-RUN apk add --no-cache --virtual .build-dependencies gcc linux-headers geoip-dev openssl tar curl go git musl-dev \
-  && apk add --no-cache python2-dev py-pip geoip \
+RUN apk add --no-cache --virtual .build-dependencies gcc linux-headers openssl tar curl git musl-dev \
+  && apk add --no-cache python2-dev py-pip \
   && apk add --update npm \
   && npm install mustache-cli --global \
-  && go env \
-  && go get -u github.com/maxmind/geoipupdate2/cmd/geoipupdate \
-  && cp $GOPATH/bin/* /usr/local/bin/ \
-  && mkdir /usr/local/share/GeoIP \
-  && ./usr/local/bin/geoipupdate \
-  && rm -rf $GOPATH \
+  && mkdir -p /usr/local/share/GeoIP/ \
+  && wget -O - https://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz | tar -C /usr/local/share/GeoIP/ --strip-components=1 -zxvf - \
   && git clone https://github.com/furlongm/openvpn-monitor.git \
   && apk del --purge .build-dependencies
 
