@@ -7,11 +7,14 @@ curl -X GET \
     -H "x-ha-access: $HASSIO_TOKEN" \
     -H "Content-Type: application/json" \
     -o "/data/config.json" \
-    http://hassio/homeassistant/api/config
+    https://hassio/homeassistant/api/config
+	
+cat /data/config.json
+cat $CONFIG_PATH
 	
 jq -s '.[0] * .[1]' /data/config.json $CONFIG_PATH > $CONFIG_PATH
 
-mustache $CONFIG_PATH /openvpn-monitor/server.mustache > ./openvpn-monitor.conf
+chevron -d $CONFIG_PATH /openvpn-monitor/server.mustache > ./openvpn-monitor.conf
 
 cat ./openvpn-monitor.conf
 
