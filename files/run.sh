@@ -7,7 +7,7 @@ curl -X GET \
     -H "x-ha-access: $HASSIO_TOKEN" \
     -H "Content-Type: application/json" \
     -o "/data/config.json" \
-    https://hassio/homeassistant/api/config
+    http://hassio/homeassistant/api/config
 	
 cat /data/config.json
 cat $CONFIG_PATH
